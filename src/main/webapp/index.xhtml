@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+
+
+<ui:composition template="/resources/templates/template.xhtml">
+		
+		<ui:define name="titulo">Venda</ui:define>
+		
+		<ui:define name="conteudo">
+
+			<h:form id="formularioUm">
+			
+				<p:growl id="mensagem" life="2500"/>  
+				
+				<p:fieldset legend="Venda" style="margin-bottom:20px; margin-top:20px">
+			        <h:panelGrid columns="3" cellpadding="5" >
+			        
+			            <p:outputLabel value="Cliente"/>
+						<p:selectOneMenu value="#{vendaBean.clienteIdSelecionado}" panelStyle="width:180px"
+	                         effect="fade" style="width:160px" filter="true" filterMatchMode="startsWith">
+	                         <f:selectItem itemLabel="Selecione..."/>
+						    <f:selectItems value="#{vendaBean.listaDeClientes}" var="cliente" itemLabel="#{cliente.nome}" itemValue="#{cliente.id}" />
+						</p:selectOneMenu>
+						<p:commandButton value="Selecionar" actionListener="#{vendaBean.selecionarCliente}" update="tabelaDeProdutos mensagem" styleClass="btn btn-primary" />
+			           
+			            <p:outputLabel value="Produtos" />
+				        <p:selectOneMenu value="#{vendaBean.produtoIdSelecionado}" panelStyle="width:180px"
+	                         effect="fade" style="width:160px" filter="true" filterMatchMode="startsWith">
+	                        <f:selectItem itemLabel="Selecione..."/>
+				            <f:selectItems value="#{vendaBean.listaDeProdutos}" var="produto" itemLabel="#{produto.nome}" itemValue="#{produto.id}"/>
+				        </p:selectOneMenu>
+			            <p:commandButton value="Selecionar" actionListener="#{vendaBean.selecionarProduto}" update="tabelaDeProdutos mensagem"/>
+			           
+			        </h:panelGrid>
+	    		</p:fieldset>
+			</h:form>
+			
+			<h:form id="tabelaDeProdutos">
+				<p:fieldset legend="Lista de Produtos" style="margin-bottom:20px; margin-top:20px">
+					<p:dataTable value="#{vendaBean.carrinho}" var="produto" emptyMessage="Nenhum Produto selecionado" style="margin-bottom:20px; margin-top:20px">
+						
+						<p:column headerText="Código" style="text-align: center;">
+							<h:outputText value="#{produto.codigo} "/>
+							
+						</p:column>
+						
+						<p:column headerText="Nome" style="text-align: center;">
+							<h:outputText value="#{produto.nome}"/>
+						</p:column>
+						
+						<p:column headerText="Preço" style="text-align: center;">
+							<h:outputText value="#{produto.preco}"/>
+						</p:column>
+						
+						<p:column headerText="Ações" style="text-align: center;">
+					        <p:commandButton icon="ui-icon-trash" actionListener="#{vendaBean.removerDoCarrinho(produto)}" update="tabelaDeProdutos formularioUm:mensagem" process="@this">
+					       		<p:confirm header="Confirmação" message="Remover do carrinho?"/>
+					        </p:commandButton>
+					    </p:column>
+						
+					</p:dataTable>
+					
+					<h:outputLabel value="Cliente: "/>
+					<h:outputText value="#{vendaBean.venda.cliente.nome}"/>
+					
+					<br />
+					<br />
+					
+					<h:outputLabel value="Total: "/>
+					<h:outputText value="#{vendaBean.total}"/>
+					
+					<br />
+					
+	      			<div style="display:flex; justify-content:space-between; float:right">
+					    <p:commandButton title="Limpar carrinho" action="#{vendaBean.limparCarrinho}" style="margin-right: 5px;" update="tabelaDeProdutos formularioUm:mensagem">
+					    	<p:confirm header="Confirmação" message="Limpar carrinho?"/>
+					    </p:commandButton>
+					    <p:commandButton title="Finalizar venda" action="#{vendaBean.finalizarVenda}" style="margin-left: 5px;" update="formularioUm:mensagem @form">
+					    	<p:confirm header="Confirmação" message="Finalizar venda?"/>
+					    </p:commandButton>
+					</div>
+				</p:fieldset>
+				
+			</h:form>
+			
+		</ui:define>
+		
+</ui:composition>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+<ui:composition template="/resources/templates/template.xhtml">
+
+		<ui:define name="titulo">Produtos</ui:define>
+		
+		<ui:define name="conteudo">
+			<h1>Cadastro de Produtos</h1>
+			
+			<h:form id="formularioUm">
+			
+				<p:growl id="mensagem" life="2500"/>  
+				
+				<p:fieldset legend="Novo Item" style="margin-bottom:20px; margin-top:20px" >
+			        <h:panelGrid columns="2" cellpadding="5" >
+			        
+			        	<p:outputLabel value="codigo *" for="inputCodigo"/>
+			            <p:inputText value="#{produtoBean.produto.codigo}" id="inputCodigo"/>
+			        	
+			            <p:outputLabel value="nome *" for="inputNome"/>
+			            <p:inputText value="#{produtoBean.produto.nome}" id="inputNome"/>
+			            
+			            <p:outputLabel value="Descrição" for="inputDescricao"/>
+			            <p:inputText value="#{produtoBean.produto.descricao}" id="inputDescricao"/>
+			          
+			            <p:outputLabel value="Preço *"  for="inputPreco"/>
+			            <p:inputText value="#{produtoBean.produto.preco}" id="inputPreco"/>
+			            	
+			            <p:outputLabel />
+			            <p:commandButton value="Salvar" actionListener="#{produtoBean.gravar}" process="@form" update="@form :formularioDois"/>
+			            
+			        </h:panelGrid>
+	    		</p:fieldset>
+			</h:form>
+			
+			<h:form id="formularioDois">
+				<p:dataTable var="produto" value="#{produtoBean.listarProdutos}" id="tabelaDeProdutos" style="border: none;" emptyMessage="Nenhum produto cadastrado">
+				   
+				   	<p:column headerText="Código" style="text-align: center;">
+				        <h:outputText value="#{produto.codigo}"/>
+				    </p:column>
+				   
+				    <p:column headerText="Produto" style="text-align: center;">
+				        <h:outputText value="#{produto.nome}"/>
+				    </p:column>
+				    
+				    <p:column headerText="Produto" style="text-align: center;">
+				        <h:outputText value="#{produto.descricao}"/>
+				    </p:column>
+				    
+				    <p:column headerText="Preço" style="text-align: center;">
+				    	<h:outputText value="R$ #{produto.preco}" />
+				    </p:column>
+				    
+				    <p:column style="text-align: right;">
+				    	<p:commandButton icon="fa fa-pencil" actionListener="#{produtoBean.editar(produto)}" update="formularioUm" style="margin-right: 5px; ">
+				    		<p:confirm header="Confirmação" message="Editar Produto"/>
+				    	</p:commandButton>
+				    	
+				    	<p:commandButton icon="fa fa-trash" actionListener="#{produtoBean.excluir(produto)}" update="formularioDois formularioUm:mensagem" style="margin-left: 5px;">
+				    		<p:confirm header="Confirmação" message="Remover Produto"/>
+				    	</p:commandButton>
+				    </p:column>
+				    
+				</p:dataTable>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			        <p:commandButton value="Confirmar" type="button" styleClass="ui-confirmdialog-yes" />
+			        <p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" />
+			    </p:confirmDialog>
+			</h:form>
+		
+		</ui:define>
+		
+	</ui:composition>
+</html>

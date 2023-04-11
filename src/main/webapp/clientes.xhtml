@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+
+
+<ui:composition template="/resources/templates/template.xhtml">
+
+	<ui:define name="titulo">Clientes</ui:define>
+		
+		<ui:define name="conteudo">
+			<h1>Cadastro de Clientes</h1>
+			
+			<h:form id="formularioUm">
+				
+				<p:growl id="mensagem" life="2500"/>  
+			
+				<p:fieldset legend="Novo Cliente" style="margin-bottom:20px; margin-top:20px" id="cadastroCliente">
+			        <h:panelGrid columns="2" cellpadding="5" >
+			        
+			        	<p:outputLabel value="codigo *" for="inputCodigo"/>
+			            <p:inputText value="#{clienteBean.cliente.codigo}" id="inputCodigo"/> 
+			            
+			            <p:outputLabel value="nome *" for="inputNome"/>
+			            <p:inputText value="#{clienteBean.cliente.nome}" id="inputNome"/>
+			            
+			            <p:outputLabel value="Endereço" for="inputEndereco"/>
+			            <p:inputText value="#{clienteBean.cliente.endereco}" id="inputEndereco"/>
+			          
+			            <p:outputLabel value="Telefone"  for="inputTelefone"/>
+			            <p:inputText value="#{clienteBean.cliente.telefone}" id="inputTelefone" />
+			            
+			            <p:outputLabel value="E-mail"  for="inputEmail"/>
+			            <p:inputText value="#{clienteBean.cliente.email}" id="inputEmail" />
+			            	
+			            	
+			            <p:outputLabel />
+			            <p:commandButton value="Salvar" actionListener="#{clienteBean.gravar}" process="@form" update="@form :formularioDois"/>
+			            
+			        </h:panelGrid>
+	    		</p:fieldset>
+			</h:form>
+			
+			<h:form id="formularioDois">
+				<p:dataTable var="cliente" value="#{clienteBean.listarClientes}" id="tabelaDeClientes" style="border: none;" emptyMessage="Nenhum cliente cadastrado">
+				   
+				   	<p:column headerText="ID" style="text-align: center;">
+				        <h:outputText value="#{cliente.id}"/>
+				    </p:column>
+				    
+				   	<p:column headerText="Código" style="text-align: center;">
+				        <h:outputText value="#{cliente.codigo}"/>
+				    </p:column>
+				   
+				    <p:column headerText="Cliente" style="text-align: center;">
+				        <h:outputText value="#{cliente.nome}"/>
+				    </p:column>
+				    
+				    <p:column headerText="Endereço" style="text-align: center;">
+				        <h:outputText value="#{cliente.endereco}"/>
+				    </p:column>
+				    
+				    <p:column headerText="Telefone" style="text-align: center;">
+				    	<h:outputText value="#{cliente.telefone}" />
+				    </p:column>
+				    
+				    <p:column headerText="E-mail" style="text-align: center;">
+				    	<h:outputText value="#{cliente.email}" />
+				    </p:column>
+				    
+				    <p:column style="text-align: right;">
+				    	<p:commandButton icon="fa fa-pencil" actionListener="#{clienteBean.editar(cliente)}" update="formularioUm:cadastroCliente" style="margin-right: 5px;">
+				    		<p:confirm header="Confirmação" message="Editar Cliente?"/>
+				    	</p:commandButton>
+				    	
+				    	<p:commandButton icon="fa fa-trash" actionListener="#{clienteBean.excluir(cliente)}" update="formularioDois formularioUm:mensagem" style="margin-left: 5px;">
+				    		<p:confirm header="Confirmação" message="Remover do Cliente?"/>
+				    	</p:commandButton>
+				    </p:column>
+				    
+				</p:dataTable>
+				
+			</h:form>
+		</ui:define>
+		
+	</ui:composition>
+	
+	
+</html>
+
